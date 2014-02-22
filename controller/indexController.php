@@ -1,14 +1,14 @@
 <?php
 
-Class indexController Extends baseController {
+  class IndexController extends BaseController
+  {
+    // set a template variable and load the index template
+    public function index()
+    {
+      $this->registry->template->page_title = 'WAJAM MVC';
+      $this->registry->template->show('index');
+    }
 
-public function index() {
-	/*** set a template variable ***/
-        $this->registry->template->welcome = 'Welcome to PHPRO MVC';
-	/*** load the index template ***/
-        $this->registry->template->show('index');
-}
-
-}
+  }
 
 ?>

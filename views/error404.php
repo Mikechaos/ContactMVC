@@ -1,3 +1,4 @@
-<h1><?php echo $blog_heading; ?></h1>
-<p>This is a custom 404 error page.</p>
-<p>You can put whatever content you like here such as search for your site</p>
+<h1>File Not Found</h1>
+<p>You've just hit an unknown route</p>
+<p>If you would like a new feature to be available on this route, well it's not going to happen..!</p>
+<p>Merry Christmas!</p>
