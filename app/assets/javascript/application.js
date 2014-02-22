@@ -3,6 +3,7 @@ $(document).ready(function() {
   Contacts_object.init();
   setHandlers();
 });
+var EnhanceTable;
 
 var Contacts_object = {
   collection: [],
@@ -10,6 +11,8 @@ var Contacts_object = {
     var self = this;
     $.get('index.php?rt=contact', function (contacts) {
       self.display(self.load(contacts));
+      // EnhanceTable = $('table').table_enhancer();
+      EnhanceTable = $('table.enhanced').table_enhancer({collection: self.collection});
     })
   },
     

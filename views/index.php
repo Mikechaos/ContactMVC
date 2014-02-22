@@ -4,10 +4,12 @@
     <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
     <title><?php echo $page_title ?></title>
     <script src="app/assets/javascript/lib/jquery.js?body=1" type="text/javascript"></script>
+    <script src="app/assets/javascript/plugins/table_enhancer.plugin.js?body=1" type="text/javascript"></script>
     <script src="app/assets/javascript/application.js" type="text/javascript"></script>
     <!-- <link href="/app/assets/css/style.css" media="screen" rel="Stylesheet" type="text/css"/> -->
   </head>
   <body>
+    <div><table class="enhanced"></table></div>
     <div id="display_contact" style="float:left;"></div>
     <div id="create_contact" style="margin-left:35%;">
       <form>
