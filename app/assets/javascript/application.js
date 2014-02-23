@@ -96,9 +96,10 @@ var formObject = {
       post_data = {contacts: this.getData(), phone_numbers: phoneData};
     console.log("Post data", post_data);
     $.post(route, post_data, function (contact_json) {
-      var contact = eval(contact_json)[0];
-      console.log('data delivered!', contact_json, contact);
-      if (contact !== 'VALIDATION ERROR') {
+      var contact;
+      if (contact_json !== 'VALIDATION ERROR') {
+        contact = eval(contact_json)[0];
+        console.log('data delivered!', contact_json, contact);
         Contacts_object.add(contact);
         self.clean();
       }
@@ -122,7 +123,6 @@ var formObject = {
   Phones: {
     new_field: ".new_phone_number",
     copy_field: ".copy_phone",
-    data: [],
     count: 0,
     
     add: function () {
@@ -141,14 +141,14 @@ var formObject = {
     },
       
     collectData: function () {
-      var self = this;
+      var data = [];
       $('.phone_number').each(function (i, $elem) {
-          self.data.push({
+          data.push({
             type: $('select', $elem).val(),
             number: $('input', $elem).val()
           });
       });
-      return JSON.stringify(this.data)
+      return JSON.stringify(data)
     },
 
     clean: function () {
