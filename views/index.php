@@ -9,8 +9,7 @@
     <!-- <link href="/app/assets/css/style.css" media="screen" rel="Stylesheet" type="text/css"/> -->
   </head>
   <body>
-    <div><table class="enhanced"></table></div>
-    <div id="display_contact" style="float:left;"></div>
+    <div id="display_contact" style="float:left;"><table class="enhanced"></table></div>
     <div id="create_contact" style="margin-left:35%;">
       <form>
         <div>
@@ -25,10 +24,10 @@
           <span class="copy_phone">
           <label>Phone Number: </label>
           <select>
-            <option value="mobile">Mobile</option>
-            <option value="home">Home</option>
-            <option value="office">Office</option>
-            <option value="other">Other</option>
+            <option value="Mobile">Mobile</option>
+            <option value="Home">Home</option>
+            <option value="Office">Office</option>
+            <option value="Other">Other</option>
           </select>
           <input type="text" id="phone_number">
           </span>

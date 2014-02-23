@@ -3,16 +3,16 @@ $(document).ready(function() {
   Contacts_object.init();
   setHandlers();
 });
-var EnhanceTable;
 
 var Contacts_object = {
   collection: [],
   init: function (contacts) {
     var self = this;
     $.get('index.php?rt=contact', function (contacts) {
-      self.display(self.load(contacts));
-      // EnhanceTable = $('table').table_enhancer();
-      self.EnhanceTable = $('table.enhanced').table_enhancer({collection: fakeData});
+      self.load(contacts);
+      self.EnhanceTable = $('table.enhanced').table_enhancer({
+        collection: self.collection,
+        deleteCb: self.destroy.bind(self)});
     })
   },
     
@@ -38,16 +38,7 @@ var Contacts_object = {
       self.init();
     });
   },
-  
-  display: function () {
-    var i = 0, html = buildTableHeader();
-    for (; i < this.collection.length; ++i) {
-      html += this.fillTemplate(this.collection[i]);
-    }
-    html += closeTable();
-    $('#display_contact').html(html);
-  },
-  
+
   fillTemplate: function (contact) {
     var html = '<tr>';
     html += '<td>' + contact.last_name + '</td>';
@@ -58,26 +49,12 @@ var Contacts_object = {
   }
 }
 
-function buildTableHeader() {
-  return '<table><thead><tr><th>First Name</th><th>Last Name</th><th>Phone Number</th><th>Delete contact</th></tr></thead><tbody>';
-}
-
-function closeTable() {
-  return '</tbody></table>';
-}
-
 function setHandlers() {
   $('#create_contact_action').on("click", function (e) {
     var validated;
     e.preventDefault()
     validated = formObject.validate()
     if (validated === true) Contacts_object.add()
-  });
-
-  $(document).on('click', '.delete_action', function(e) {
-    var validated, id = e.target.getAttribute('data-id');
-    e.preventDefault();
-    Contacts_object.destroy(id);
   });
   
   $(document).on('click', '.add_phone_action', function(e) {
