@@ -22,6 +22,10 @@ class contactController extends BaseController {
     $this->registry->template->json_contacts = json_encode([$json_contact]);
     $this->registry->template->show('show_contact');
   }
+  
+  public function update() {
+    $this->contactModel->update($_POST);
+  }
 
   public function destroy() {
     $id = $_POST['id'];

@@ -21,7 +21,23 @@
       return json_encode($contacts);
     }
     
-    public function loadNumbers($contact) {
+    public function create($post)
+    {
+      $this->dispatchData($post);
+      return $this->getContact($this->last_contact_id);
+    }
+    
+    public function update($post)
+    {
+      $contact_info = (array)json_decode($post['contacts']);
+      $sql = $this->prepare_update_query('contacts', $contact_info);
+      echo $sql;
+      $this->mysqli->query($sql);
+      // $this->mysqli->query("UPDATE contacts SET last_name = '" . $contact_info['last_name'] . "', first_name = "'update' where id = 90;
+    }
+    
+    public function loadNumbers($contact)
+    {
       $contact_id = $contact['id'];
       $contact['phone_numbers'] = [];
       $phones = $this->mysqli->query("SELECT * FROM phone_numbers WHERE contact_id=$contact_id ORDER BY id");
@@ -32,11 +48,6 @@
       return $contact;
     }
     
-    public function create($post)
-    {
-      $this->dispatchData($post);
-      return $this->getContact($this->last_contact_id);
-    }
     
     public function dispatchData($tables)
     {
@@ -110,6 +121,16 @@
       $columns = "(" . implode(',', array_keys($data)) . ")";
       $values = "('" . implode("','", $data) . "')";
       return "INSERT INTO $table $columns VALUES $values";
+    }
+    
+    public function prepare_update_query($table, $data) {
+      $sql = "UPDATE $table SET ";
+      $fields = "";
+      foreach ($data as $key => $value)
+      {
+        $fields .= (($fields == "") ? '':', ') . $key . "='" . $value . "'";
+      }
+      return $sql . $fields . " WHERE id = " . $data['id'];
     }
     
     public function getContact($id) {
