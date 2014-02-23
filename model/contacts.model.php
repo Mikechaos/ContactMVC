@@ -15,9 +15,20 @@
       $contacts = [];
       while ($contact = $rows->fetch_assoc())
       {
+        $contact = $this->loadNumbers($contact);
         array_push($contacts, $contact);
       }
       return json_encode($contacts);
+    }
+    public function loadNumbers($contact) {
+      $contact_id = $contact['id'];
+      $contact['phone_numbers'] = [];
+      $phones = $this->mysqli->query("SELECT * FROM phone_numbers WHERE contact_id=$contact_id ORDER BY id");
+      while ($phone = $phones->fetch_assoc())
+      {
+        array_push($contact['phone_numbers'], $phone);
+      }
+      return $contact;
     }
     
     public function create($post)

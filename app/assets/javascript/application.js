@@ -12,7 +12,7 @@ var Contacts_object = {
     $.get('index.php?rt=contact', function (contacts) {
       self.display(self.load(contacts));
       // EnhanceTable = $('table').table_enhancer();
-      EnhanceTable = $('table.enhanced').table_enhancer({collection: self.collection});
+      self.EnhanceTable = $('table.enhanced').table_enhancer({collection: fakeData});
     })
   },
     
