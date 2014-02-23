@@ -22,13 +22,9 @@ var Contacts_object = {
     return this.collection
   },
   
-  add: function () {
-    var contact = formObject.create();
-    this.collection.push({
-      first_name: contact.first_name, 
-      last_name: contact.last_name, 
-      phone_number: contact.phone_number
-    });
+  add: function (contact) {
+    this.collection.push(contact);
+    $('table.enhanced').table_enhancer('add', contact);
   },
   
   destroy: function (id) {
@@ -52,9 +48,9 @@ var Contacts_object = {
 function setHandlers() {
   $('#create_contact_action').on("click", function (e) {
     var validated;
-    e.preventDefault()
+    e.preventDefault();
     validated = formObject.validate()
-    if (validated === true) Contacts_object.add()
+    if (validated === true) formObject.create()
   });
   
   $(document).on('click', '.add_phone_action', function(e) {
@@ -96,16 +92,18 @@ var formObject = {
   create: function () {
     var self = this,
       route = 'index.php?rt=contact/create',
-      post_data = {contacts: this.getData(), phone_numbers: this.Phones.collectData()};
+      phoneData = this.Phones.collectData(),
+      post_data = {contacts: this.getData(), phone_numbers: phoneData};
     console.log("Post data", post_data);
-    $.post(route, post_data, function (result) {
-      console.log('data delivered!', result);
-      if (result !== 'VALIDATION ERROR') {
-        Contacts_object.init()
-        self.clean()
+    $.post(route, post_data, function (contact_json) {
+      var contact = eval(contact_json)[0];
+      console.log('data delivered!', contact_json, contact);
+      if (contact !== 'VALIDATION ERROR') {
+        Contacts_object.add(contact);
+        self.clean();
       }
     });
-    return this.data;
+    return $.extend({}, this.data, {phone_numbers: this.Phones.data});
   },
     
   getData: function () {
@@ -118,11 +116,13 @@ var formObject = {
     for (; i < this.fields.length; ++i) {
       $('#' + this.fields[i]).val('');
     }
+    this.Phones.clean();
   },
     
   Phones: {
     new_field: ".new_phone_number",
     copy_field: ".copy_phone",
+    data: [],
     count: 0,
     
     add: function () {
@@ -141,15 +141,18 @@ var formObject = {
     },
       
     collectData: function () {
-      var data = [];
+      var self = this;
       $('.phone_number').each(function (i, $elem) {
-          data.push({
+          self.data.push({
             type: $('select', $elem).val(),
             number: $('input', $elem).val()
           });
       });
-      console.log(JSON.stringify(data));
-      return JSON.stringify(data)
+      return JSON.stringify(this.data)
+    },
+
+    clean: function () {
+      this.data = [];
     },
   },
 }
