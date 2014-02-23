@@ -18,17 +18,9 @@ class contactController extends BaseController {
 
   public function create()
   {
-    // print_r($_POST);
-    $this->contactModel->create($_POST);
-    // $data = (array)json_decode($_POST['form']);
-    // $columns = "(" . implode(',', array_keys($data)) . ")";
-    // $values = "('" . implode("','", $data) . "')";
-    // $sql = "INSERT INTO contacts $columns VALUES $values";
-    // echo mysqli_escape_string($this->mysqli, $sql);
-    // $result = $this->mysqli->query($sql);
-    // echo "results: " . $result;
-    // print_r(array_keys((array)json_decode($_POST['post'])));
-    // print_r(json_decode($_POST['post']));
+    $json_contact = $this->contactModel->create($_POST);
+    $this->registry->template->json_contacts = json_encode([$json_contact]);
+    $this->registry->template->show('show_contact');
   }
 
   public function destroy() {

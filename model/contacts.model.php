@@ -35,7 +35,7 @@
     public function create($post)
     {
       $this->dispatchData($post);
-      echo json_encode($this->getContact($this->last_contact_id));
+      return $this->getContact($this->last_contact_id);
     }
     
     public function dispatchData($tables)
