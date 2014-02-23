@@ -49,8 +49,8 @@ function setHandlers() {
   $('#create_contact_action').on("click", function (e) {
     var validated;
     e.preventDefault();
-    validated = formObject.validate()
-    if (validated === true) formObject.create()
+    validated = formObject.validate();
+    if (validated === true) formObject.create();
   });
   
   $(document).on('click', '.add_phone_action', function(e) {
@@ -67,6 +67,13 @@ function setHandlers() {
     var contact = Contacts_object.getContact($(e.target).attr('data-id'));
     e.preventDefault();
     formObject.fillForm(contact);
+  });  
+  
+  $(document).on('click', '#update_contact_action', function(e) {
+    e.preventDefault();
+    validated = formObject.validate();
+    if (validated === true) formObject.update($(e.target).attr('data-id'));
+    
   });
 }
 
@@ -113,6 +120,19 @@ var formObject = {
       }
     });
     return $.extend({}, this.data, {phone_numbers: this.Phones.data});
+  },
+    
+  update: function (id) {
+    var self = this,
+      route = 'index.php?rt=contact/update',
+      phoneData = this.Phones.collectData(),
+      post_data;
+    this.data['id'] = id;
+    post_data = {contacts: this.getData(), phone_numbers: phoneData};
+    console.log("Post data", post_data);
+    $.post(route, post_data, function (contact_json) {
+      console.log(contact_json);
+    });
   },
     
   getData: function () {
