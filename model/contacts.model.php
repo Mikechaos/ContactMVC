@@ -20,6 +20,7 @@
       }
       return json_encode($contacts);
     }
+    
     public function loadNumbers($contact) {
       $contact_id = $contact['id'];
       $contact['phone_numbers'] = [];
@@ -34,6 +35,7 @@
     public function create($post)
     {
       $this->dispatchData($post);
+      echo json_encode($this->getContact($this->last_contact_id));
     }
     
     public function dispatchData($tables)
@@ -67,7 +69,7 @@
     {
       $data = $this->sanitize_data($data);
       if ($data == false) die("VALIDATION ERROR");
-      echo $sql = $this->prepare_insert_query($table, $data);
+      $sql = $this->prepare_insert_query($table, $data);
       $result = $this->mysqli->query($sql);
       if (!$result)
       {
@@ -108,6 +110,12 @@
       $columns = "(" . implode(',', array_keys($data)) . ")";
       $values = "('" . implode("','", $data) . "')";
       return "INSERT INTO $table $columns VALUES $values";
+    }
+    
+    public function getContact($id) {
+      $result = $this->mysqli->query("SELECT * FROM contacts WHERE id=$id LIMIT 1");
+      $contact = $this->loadNumbers($result->fetch_assoc());
+      return $contact;
     }
   }
 
