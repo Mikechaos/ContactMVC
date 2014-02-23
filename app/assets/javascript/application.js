@@ -35,14 +35,14 @@ var Contacts_object = {
     });
   },
 
-  fillTemplate: function (contact) {
-    var html = '<tr>';
-    html += '<td>' + contact.last_name + '</td>';
-    html += '<td>' + contact.first_name + '</td>';
-    html += '<td>' + contact.phone_number + '</td>';
-    html += '<td><button class="delete_action" data-id="' + contact.id + '">X</button>';
-    return html + '</tr>';
-  }
+  findWhere: function (searchHash) {
+    return findWhere(this.collection, searchHash);
+  },
+    
+  getContact: function (id) {
+    return this.findWhere({id:id.toString()});
+  },
+  
 }
 
 function setHandlers() {
@@ -62,10 +62,18 @@ function setHandlers() {
     e.preventDefault();
     formObject.Phones.destroy(e.target.getAttribute('data-id'));
   });
+  
+  $(document).on('click', '.th-update-action', function(e) {
+    var contact = Contacts_object.getContact($(e.target).attr('data-id'));
+    e.preventDefault();
+    formObject.fillForm(contact);
+  });
 }
 
 var formObject = {
   fields: ['first_name', 'last_name'],
+  activeButton: "#create_contact_action",
+  hiddenButton: "#update_contact_action",
   data: {},
   
   validate: function () {
@@ -110,6 +118,20 @@ var formObject = {
   getData: function () {
     return JSON.stringify(this.data)
   },
+  
+  fillForm: function (contact) {
+    this.switchButton(contact.id);
+    this.fields.forEach(function (field) {
+      $("#" + field).val(contact[field]);
+    });
+    this.Phones.fillForm(contact.phone_numbers);
+  },
+    
+  switchButton: function (id) {
+    $(".form-action-btn").hide();
+    if (typeof id !== "undefined") $("#update_contact_action").attr('data-id', id).show();
+    else $("#create_contact_action").show();
+  },
     
   clean: function () {
     var i = 0;
@@ -151,10 +173,32 @@ var formObject = {
       return JSON.stringify(data)
     },
 
+    fillForm: function (phones) {
+      var i, count = 0;
+      for (i = 0; i < phones.length; ++i) {
+        if (i > 0) {this.add(); count = this.count;}
+        $elem = $("#phone_number_" + this.count).attr('data-id', phones[i].id)
+        $elem.children("select").val(phones[i].type);
+        $elem.children("input").val(phones[i].number);
+      }
+    },
+    
     clean: function () {
       this.data = [];
     },
   },
+}
+
+function findWhere(collection, searchHash) {
+  var i, found;
+  for (i = 0; i < collection.length; ++i) {
+    found = true;
+    for (key in searchHash) {
+      if (collection[i][key] !== searchHash[key]) {found = false; break;}
+    }
+    if (found) break;
+  }
+  return collection[i];
 }
 
 // function loadContact(json) {

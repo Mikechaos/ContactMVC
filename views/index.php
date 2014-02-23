@@ -21,7 +21,7 @@
           <input type="text" id="last_name">
         </div>
         <div class="phone_number">
-          <span class="copy_phone">
+          <span class="copy_phone" id="phone_number_0">
           <label>Phone Number: </label>
           <select>
             <option value="Mobile">Mobile</option>
@@ -35,7 +35,8 @@
         </div>
         <div class="new_phone_number">
         </div>
-        <button class="btn btn-success" id="create_contact_action">Submit</button>
+        <button class="btn btn-success form-action-btn" id="create_contact_action">Submit</button>
+        <button class="btn btn-success form-action-btn" id="update_contact_action" style="display:none;">Save</button>
       </form>
     </div>
   </body>
