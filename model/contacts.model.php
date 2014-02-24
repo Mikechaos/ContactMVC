@@ -29,11 +29,26 @@
     
     public function update($post)
     {
-      $contact_info = (array)json_decode($post['contacts']);
-      $sql = $this->prepare_update_query('contacts', $contact_info);
-      echo $sql;
+      $contact = $this->updateContacts((array)json_decode($post['contacts']));
+      $this->updatePhones((array)json_decode($post['phone_numbers']));
+      return $this->getContact($contact['id']);
+    }
+
+    public function updateContacts($contact)
+    {
+      $sql = $this->prepare_update_query('contacts', $contact);
       $this->mysqli->query($sql);
-      // $this->mysqli->query("UPDATE contacts SET last_name = '" . $contact_info['last_name'] . "', first_name = "'update' where id = 90;
+      
+      return $contact;
+    }
+    
+    public function updatePhones($phones)
+    {
+      foreach ($phones as $phone)
+      {
+        $sql = $this->prepare_update_query('phone_numbers', (array)$phone);
+        $this->mysqli->query($sql);
+      }
     }
     
     public function loadNumbers($contact)

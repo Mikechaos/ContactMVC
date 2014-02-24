@@ -18,13 +18,15 @@ class contactController extends BaseController {
 
   public function create()
   {
-    $json_contact = $this->contactModel->create($_POST);
-    $this->registry->template->json_contacts = json_encode([$json_contact]);
+    $contact = $this->contactModel->create($_POST);
+    $this->registry->template->json_contacts = json_encode([$contact]);
     $this->registry->template->show('show_contact');
   }
   
   public function update() {
-    $this->contactModel->update($_POST);
+    $contact = $this->contactModel->update($_POST);
+    $this->registry->template->json_contacts = json_encode([$contact]);
+    $this->registry->template->show('show_contact');
   }
 
   public function destroy() {
