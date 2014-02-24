@@ -171,7 +171,7 @@ var formObject = {
       ++this.count
       html = $(this.copy_field).html() + this.deleteTemplate();
       appendTo = $(this.new_field);
-      appendTo.append('<div class="phone_number" id="phone_number_' + this.count + '">' + html + '</div>');
+      appendTo.append('<div class="phone_number extra_phone" id="phone_number_' + this.count + '">' + html + '</div>');
     },
     
     destroy: function (id) {
@@ -195,16 +195,19 @@ var formObject = {
 
     fillForm: function (phones) {
       var i, count = 0;
+      this.clean();
       for (i = 0; i < phones.length; ++i) {
         if (i > 0) {this.add(); count = this.count;}
-        $elem = $("#phone_number_" + this.count).attr('data-id', phones[i].id)
+        $elem = $("#phone_number_" + count).attr('data-id', phones[i].id)
         $elem.children("select").val(phones[i].type);
         $elem.children("input").val(phones[i].number);
       }
     },
     
     clean: function () {
-      this.data = [];
+      $(".extra_phone").detach();
+      $(".phone_number select").val('Mobile');
+      $(".phone_number input").val('');
     },
   },
 }
