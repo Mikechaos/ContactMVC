@@ -184,11 +184,13 @@ var formObject = {
       
     collectData: function () {
       var data = [];
-      $('.phone_number').each(function (i, $elem) {
-          data.push({
-            type: $('select', $elem).val(),
-            number: $('input', $elem).val()
-          });
+      $('.phone_number').each(function (i, elem) {
+        var id, obj = {
+          type: $('select', elem).val(),
+          number: $('input', elem).val()
+        };
+        if (parseInt(id = $(elem).attr('data-id')) > 0) obj['id'] = id;
+        data.push(obj);
       });
       return JSON.stringify(data)
     },

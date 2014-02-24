@@ -20,8 +20,8 @@
           <label>Last Name: </label>
           <input type="text" id="last_name">
         </div>
-        <div class="phone_number">
-          <span class="copy_phone" id="phone_number_0">
+        <div>
+          <span class="copy_phone phone_number" id="phone_number_0">
           <label>Phone Number: </label>
           <select>
             <option value="Mobile">Mobile</option>
