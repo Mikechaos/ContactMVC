@@ -46,8 +46,16 @@
     {
       foreach ($phones as $phone)
       {
-        $sql = $this->prepare_update_query('phone_numbers', (array)$phone);
-        $this->mysqli->query($sql);
+        $phone = (array)$phone;
+        if (array_key_exists('id', $phone))
+        {
+          $sql = $this->prepare_update_query('phone_numbers', $phone);
+        }
+        else
+        {
+          $sql = $this->prepare_insert_query('phone_numbers', $phone);
+        }
+          $this->mysqli->query($sql);
       }
     }
     
