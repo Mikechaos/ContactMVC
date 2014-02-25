@@ -27,6 +27,10 @@ var Contacts_object = {
     $('table.enhanced').table_enhancer('add', contact);
   },
   
+  update: function (contact) {
+    console.log("UPDATE ACTION");
+  },
+    
   destroy: function (id) {
     var self = this;
     $.post('index.php?rt=contact/destroy', {id: id}, function (result) {
@@ -110,15 +114,7 @@ var formObject = {
       phoneData = this.Phones.collectData(),
       post_data = {contacts: this.getData(), phone_numbers: phoneData};
     console.log("Post data", post_data);
-    $.post(route, post_data, function (contact_json) {
-      var contact;
-      if (contact_json !== 'VALIDATION ERROR') {
-        contact = eval(contact_json)[0];
-        console.log('data delivered!', contact_json, contact);
-        Contacts_object.add(contact);
-        self.clean();
-      }
-    });
+    $.post(route, post_data, this.dealWithReturnedJson.bind(this, "add"));
     return $.extend({}, this.data, {phone_numbers: this.Phones.data});
   },
     
@@ -130,11 +126,19 @@ var formObject = {
     this.data['id'] = id;
     post_data = {contacts: this.getData(), phone_numbers: phoneData};
     console.log("Post data", post_data);
-    $.post(route, post_data, function (contact_json) {
-      console.log(contact_json);
-    });
+    $.post(route, post_data, this.dealWithReturnedJson.bind(this, "update"));
   },
-    
+
+  dealWithReturnedJson: function (action, contact_json) {
+      var contact;
+      if (contact_json !== 'VALIDATION ERROR') {
+        console.log('data delivered!', contact_json);
+        contact = eval(contact_json)[0];
+        Contacts_object[action].call(Contacts_object, contact);
+        this.clean();
+      }
+  },
+
   getData: function () {
     return JSON.stringify(this.data)
   },
@@ -160,6 +164,7 @@ var formObject = {
       $('#' + this.fields[i]).val('');
     }
     this.Phones.clean();
+    this.switchButton();
   },
     
   Phones: {
@@ -211,6 +216,7 @@ var formObject = {
       $(".extra_phone").detach();
       $(".phone_number select").val('Mobile');
       $(".phone_number input").val('');
+      $("#phone_number_0").attr('data-id', '');
     },
   },
 }
