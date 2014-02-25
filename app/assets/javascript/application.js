@@ -125,7 +125,7 @@ var formObject = {
   update: function (id) {
     var self = this,
       route = 'index.php?rt=contact/update',
-      phoneData = this.Phones.collectData(),
+      phoneData = this.Phones.collectData(id),
       post_data;
     this.data['id'] = id;
     post_data = {contacts: this.getData(), phone_numbers: phoneData};
@@ -182,7 +182,7 @@ var formObject = {
       return "<button class='delete_phone_action' data-id='" + this.count + "'>x</button>";
     },
       
-    collectData: function () {
+    collectData: function (contact_id) {
       var data = [];
       $('.phone_number').each(function (i, elem) {
         var id, obj = {
@@ -190,6 +190,7 @@ var formObject = {
           number: $('input', elem).val()
         };
         if (parseInt(id = $(elem).attr('data-id')) > 0) obj['id'] = id;
+        if (contact_id != null) obj['contact_id'] = contact_id;
         data.push(obj);
       });
       return JSON.stringify(data)
