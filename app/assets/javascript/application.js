@@ -28,7 +28,8 @@ var Contacts_object = {
   },
   
   update: function (contact) {
-    console.log("UPDATE ACTION");
+    $.extend(this.getContact(contact.id), contact);
+    $('table.enhanced').table_enhancer('update', contact);
   },
     
   destroy: function (id) {
